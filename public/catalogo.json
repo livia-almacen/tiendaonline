@@ -1,0 +1,144 @@
+{
+  "version": 1,
+  "exportDate": "2026-10-05T00:00:00.000Z",
+  "store": {
+    "name": "Livia",
+    "slogan": "Tienda Natural",
+    "whatsapp": "5493515551234",
+    "instagram": "@livia_tienda",
+    "address": "Jesús María, Córdoba",
+    "hours": "Lun-Vie 9-13 y 17-20, Sáb 9-13",
+    "deliveryZones": ["Jesús María", "Colonia Caroya", "Sinsacate"],
+    "heroLine1": "Alimentación consciente",
+    "heroLine2": "en la puerta de tu casa"
+  },
+  "categories": ["Frutos Secos", "Semillas", "Cereales", "Legumbres", "Especias", "Infusiones", "Endulzantes", "Aceites"],
+  "pricelistName": "Precios Web - Ejemplo",
+  "products": [
+    {
+      "id": 1,
+      "name": "Almendras naturales",
+      "category": "Frutos Secos",
+      "type": "weight",
+      "unit": "kg",
+      "price": 20000,
+      "image": "almendras-naturales.jpg",
+      "description": "Almendras enteras sin sal ni conservantes. Origen mendocino. Excelente fuente de vitamina E, magnesio y grasas saludables.",
+      "stockStatus": "disponible",
+      "presentations": [
+        {"qty": 0.1, "unit": "kg", "label": "100g", "price": 2200},
+        {"qty": 0.25, "unit": "kg", "label": "1/4 kg", "price": 5500},
+        {"qty": 0.5, "unit": "kg", "label": "1/2 kg", "price": 10500},
+        {"qty": 1, "unit": "kg", "label": "1 kg", "price": 20000}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Nuez pelada mariposa",
+      "category": "Frutos Secos",
+      "type": "weight",
+      "unit": "kg",
+      "price": 25500,
+      "image": null,
+      "description": "Nuez pelada calidad premium, corte mariposa. Rica en omega 3.",
+      "stockStatus": "disponible",
+      "presentations": [
+        {"qty": 0.1, "unit": "kg", "label": "100g", "price": 2750},
+        {"qty": 0.25, "unit": "kg", "label": "1/4 kg", "price": 6800},
+        {"qty": 0.5, "unit": "kg", "label": "1/2 kg", "price": 13200},
+        {"qty": 1, "unit": "kg", "label": "1 kg", "price": 25500}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Castañas de cajú",
+      "category": "Frutos Secos",
+      "type": "weight",
+      "unit": "kg",
+      "price": 29600,
+      "image": null,
+      "description": "Castañas de cajú tostadas sin sal. Cremosas y con sabor delicado.",
+      "stockStatus": "disponible",
+      "presentations": [
+        {"qty": 0.1, "unit": "kg", "label": "100g", "price": 3100},
+        {"qty": 0.25, "unit": "kg", "label": "1/4 kg", "price": 7500}
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Semillas de chía",
+      "category": "Semillas",
+      "type": "weight",
+      "unit": "kg",
+      "price": 9500,
+      "image": null,
+      "description": "Chía blanca argentina. Alto contenido de omega 3, fibra y antioxidantes.",
+      "stockStatus": "disponible",
+      "presentations": [
+        {"qty": 0.1, "unit": "kg", "label": "100g", "price": 1100},
+        {"qty": 0.25, "unit": "kg", "label": "1/4 kg", "price": 2600},
+        {"qty": 0.5, "unit": "kg", "label": "1/2 kg", "price": 5200},
+        {"qty": 1, "unit": "kg", "label": "1 kg", "price": 9500}
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Yerba mate orgánica",
+      "category": "Infusiones",
+      "type": "weight",
+      "unit": "kg",
+      "price": 7000,
+      "image": null,
+      "description": "Yerba mate misionera orgánica, sin palo, sabor suave y aromático.",
+      "stockStatus": "disponible",
+      "presentations": [
+        {"qty": 0.5, "unit": "kg", "label": "1/2 kg", "price": 3800},
+        {"qty": 1, "unit": "kg", "label": "1 kg", "price": 7000}
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Miel pura de flores",
+      "category": "Endulzantes",
+      "type": "unit",
+      "unit": "frasco",
+      "price": 6500,
+      "image": null,
+      "description": "Miel pura de flores silvestres. Producción cordobesa artesanal. Frasco de 500g.",
+      "stockStatus": "poco",
+      "presentations": [
+        {"qty": 1, "unit": "frasco", "label": "1 frasco (500g)", "price": 6500}
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Cúrcuma en polvo",
+      "category": "Especias",
+      "type": "weight",
+      "unit": "kg",
+      "price": 25000,
+      "image": null,
+      "description": "Cúrcuma pura molida. Ideal para dorados, curries y golden milk.",
+      "stockStatus": "disponible",
+      "presentations": [
+        {"qty": 0.05, "unit": "kg", "label": "50g", "price": 1400},
+        {"qty": 0.1, "unit": "kg", "label": "100g", "price": 2500}
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Lentejas verdinas",
+      "category": "Legumbres",
+      "type": "weight",
+      "unit": "kg",
+      "price": 4400,
+      "image": null,
+      "description": "Lenteja verdina de origen argentino. Mantiene la forma en la cocción.",
+      "stockStatus": "disponible",
+      "presentations": [
+        {"qty": 0.5, "unit": "kg", "label": "1/2 kg", "price": 2400},
+        {"qty": 1, "unit": "kg", "label": "1 kg", "price": 4400}
+      ]
+    }
+  ]
+}
