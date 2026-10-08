@@ -35,7 +35,7 @@
 //
 // ═══════════════════════════════════════════════════════
 
-export const CATALOG_GIST_URL = "";
+export const CATALOG_GIST_URL = "https://gist.githubusercontent.com/livia-almacen/702d9bd9b58d925d538ae282ae725ca7/raw/catalogo.json";
 
 // Dejar en "" para usar el /public/catalogo.json local durante el desarrollo.
 // Poner la URL completa del raw del Gist para producción.
