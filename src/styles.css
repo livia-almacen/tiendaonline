@@ -167,10 +167,10 @@ a { color: var(--gD); text-decoration: none; }
   z-index: 2;
 }
 [data-theme="dark"] .heroLogo {
-  background: #fff;
+ 
   border-radius: 12px;
-  padding: 10px 14px;
-  box-shadow: 0 4px 16px rgba(0,0,0,.25);
+  padding: 1px 1px;
+  box-shadow: 0 0px 0px rgba(0,0,0,.25);
 }
 
 .heroLeaf {
