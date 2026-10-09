@@ -1,6 +1,5 @@
 /* ═══════════════════════════════════════════════════════
    LIVIA TIENDA - Design System
-   Paleta heredada de Amapola (verdes + beiges cálidos)
    ═══════════════════════════════════════════════════════ */
 
 :root {
@@ -25,6 +24,10 @@
   --sh: 0 1px 3px rgba(0,0,0,.04);
   --shM: 0 4px 16px rgba(90,143,60,.12);
   --shL: 0 8px 32px rgba(90,143,60,.18);
+
+  --footerBg: #3d6628;
+  --footerTx: #e8e5df;
+  --footerAcc: #ffffff;
 }
 
 [data-theme="dark"] {
@@ -44,6 +47,10 @@
   --txL: #7f7a70;
   --dg: #e07d5a;
   --wd: #c9a984;
+
+  --footerBg: #1b2e18;
+  --footerTx: #d4d0c4;
+  --footerAcc: #e8e5df;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Nunito', sans-serif; }
@@ -64,7 +71,7 @@ a { color: var(--gD); text-decoration: none; }
 
 .serif { font-family: 'Playfair Display', Georgia, serif; }
 
-/* ───── HEADER ───── */
+/* ───── HEADER (sin logo, solo acciones a la derecha) ───── */
 .header {
   position: sticky;
   top: env(safe-area-inset-top);
@@ -72,34 +79,15 @@ a { color: var(--gD); text-decoration: none; }
   background: rgba(250,248,244,.95);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--brd);
-  padding: 14px 20px;
+  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
+  min-height: 56px;
 }
 [data-theme="dark"] .header { background: rgba(26,31,26,.95); }
 
-.brand { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-.logo {
-  width: 44px; height: 44px;
-  background: linear-gradient(135deg, var(--g), var(--gD));
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  color: #fff;
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 24px; font-weight: 800;
-  box-shadow: var(--shM);
-}
-.brand h1 {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 22px; color: var(--gD); font-weight: 800; line-height: 1;
-}
-.brand .subtitle {
-  font-size: 10px; color: var(--txL);
-  text-transform: uppercase; letter-spacing: 2px;
-  font-weight: 700; margin-top: 2px;
-}
+.headerSpacer { flex: 1; cursor: pointer; min-height: 36px; }
 
 .hActions { display: flex; align-items: center; gap: 6px; }
 .iconBtn {
@@ -118,10 +106,22 @@ a { color: var(--gD); text-decoration: none; }
   border: 2px solid var(--bg);
 }
 
-/* ───── HERO ───── */
+/* Fallback: cuadrado verde con la primer letra (si no hay imagen) */
+.logo {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, var(--g), var(--gD));
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 24px; font-weight: 800;
+  box-shadow: var(--shM);
+}
+
+/* ───── HERO (con logo arriba del título) ───── */
 .hero {
   background: linear-gradient(135deg, var(--gBg) 0%, var(--acBg) 100%);
-  padding: 60px 20px 50px;
+  padding: 50px 20px 50px;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -138,9 +138,37 @@ a { color: var(--gD); text-decoration: none; }
   width: 180px; height: 180px;
   background: radial-gradient(circle, rgba(196,163,90,.15) 0%, transparent 70%);
 }
+
+/* Logo tamaño mediano arriba del hero */
+.heroLogo {
+  display: block;
+  margin: 0 auto 4px;
+  max-width: 400px;
+  width: 70%;
+  height: auto;
+  position: relative;
+  z-index: 2;
+}
+[data-theme="dark"] .heroLogo {
+
+  border-radius: 12px;
+  padding: 1px 1px;
+  box-shadow: 0 0px 0px rgba(0,0,0,.25);
+}
+
+/* Hojita antes del texto h2 */
+.heroLeaf {
+  display: inline-block;
+  font-size: 22px;
+  margin-right: 10px;
+  vertical-align: middle;
+  position: relative;
+  top: -4px;
+}
+
 .hero h2 {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 38px; color: var(--gD); font-weight: 800;
+  font-size: 30px; color: var(--gD); font-weight: 800;
   margin-bottom: 12px; line-height: 1.15;
   position: relative; z-index: 2;
 }
@@ -149,16 +177,12 @@ a { color: var(--gD); text-decoration: none; }
   max-width: 520px; margin: 0 auto;
   position: relative; z-index: 2;
 }
-.hero .decor {
-  display: inline-block; margin-bottom: 14px;
-  font-size: 26px; position: relative; z-index: 2;
-}
 
 /* ───── SEARCH & FILTERS ───── */
 .searchBar {
   padding: 20px;
   position: sticky;
-  top: calc(72px + env(safe-area-inset-top));
+  top: calc(56px + env(safe-area-inset-top));
   z-index: 99;
   background: var(--bg);
   border-bottom: 1px solid var(--brdL);
@@ -494,21 +518,33 @@ main { max-width: 1200px; margin: 0 auto; padding: 20px; }
 
 /* ───── FOOTER ───── */
 footer {
-  margin-top: 60px; padding: 30px 20px;
-  background: var(--gD); color: #e8e5df;
+  margin-top: 60px; padding: 40px 20px 30px;
+  background: var(--footerBg); color: var(--footerTx);
   text-align: center;
+  transition: background .3s;
+}
+footer .fLogoImg {
+  max-width: 220px;
+  width: 70%;
+  height: auto;
+  margin: 0 auto 16px;
+  display: block;
+  background: #fff;
+  padding: 12px 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.2);
 }
 footer .fLogo {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 22px; color: #fff;
+  font-size: 22px; color: var(--footerAcc);
   font-weight: 800; margin-bottom: 6px;
 }
 footer .fSub {
   font-size: 11px; text-transform: uppercase;
   letter-spacing: 2px; font-weight: 700; opacity: .7;
 }
-footer .fInfo { margin-top: 16px; font-size: 13px; opacity: .85; }
-footer .fInfo a { color: #fff; text-decoration: underline; }
+footer .fInfo { margin-top: 16px; font-size: 13px; opacity: .9; }
+footer .fInfo a { color: var(--footerAcc); text-decoration: underline; }
 
 /* ───── LOADING STATE ───── */
 .loader {
@@ -541,10 +577,15 @@ footer .fInfo a { color: #fff; text-decoration: underline; }
 @media (max-width: 768px) {
   .detailWrap { grid-template-columns: 1fr; }
 }
+
 @media (max-width: 640px) {
-  .hero h2 { font-size: 28px; }
-  .brand h1 { font-size: 18px; }
-  .brand .subtitle { font-size: 9px; }
+  .header { padding: 8px 14px; min-height: 52px; }
+  .searchBar { top: calc(52px + env(safe-area-inset-top)); }
+  .hero { padding: 36px 20px 40px; }
+  .heroLogo { max-width: 260px; width: 75%; margin-bottom: 18px; }
+  .heroLeaf { font-size: 18px; margin-right: 8px; }
+  .hero h2 { font-size: 26px; }
+  .hero p { font-size: 14px; }
   .logo { width: 38px; height: 38px; font-size: 20px; }
   .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .card { border-radius: 12px; }
@@ -554,8 +595,8 @@ footer .fInfo a { color: #fff; text-decoration: underline; }
   .detailInfo h2 { font-size: 24px; }
   .detailImg { font-size: 80px; }
   .cartTitle { font-size: 24px; }
-  .header { padding: 12px 14px; }
   .deliveryOpts { grid-template-columns: 1fr; }
+  footer .fLogoImg { max-width: 180px; width: 65%; }
 }
 
 /* ───── ANIMATIONS ───── */

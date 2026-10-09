@@ -1,15 +1,10 @@
 import { Icon } from '../utils/icons';
 
-export default function Header({ store, cartCount, onGoHome, onGoCart, theme, onToggleTheme }) {
+export default function Header({ cartCount, onGoHome, onGoCart, theme, onToggleTheme }) {
   return (
     <header className="header">
-      <div className="brand" onClick={onGoHome}>
-        <div className="logo">{store?.name?.[0] || "L"}</div>
-        <div>
-          <h1>{store?.name || "Livia"}</h1>
-          <div className="subtitle">{store?.slogan || "Tienda Natural"}</div>
-        </div>
-      </div>
+      {/* El logo se movió al hero, el header queda solo con las acciones a la derecha */}
+      <div className="headerSpacer" onClick={onGoHome}></div>
       <div className="hActions">
         <button className="iconBtn" title={theme === "dark" ? "Modo claro" : "Modo oscuro"} onClick={onToggleTheme}>
           <Icon name={theme === "dark" ? "sun" : "moon"} size={20} />

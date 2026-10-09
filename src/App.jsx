@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import CatalogView from './views/CatalogView';
@@ -14,25 +14,52 @@ export default function App() {
   const { cart, addItem, removeItem, updateQty, clear, count, subtotal } = useCart();
   const { theme, toggle } = useTheme();
 
-  const [view, setView] = useState("catalog"); // catalog | detail | cart | checkout
+  const [view, setView] = useState("catalog");
   const [selected, setSelected] = useState(null);
 
-  const goHome = () => { setView("catalog"); setSelected(null); };
-  const goCart = () => setView("cart");
-  const goCheckout = () => setView("checkout");
-  const openProduct = (p) => { setSelected(p); setView("detail"); };
+  // Browser back button support
+  useEffect(() => {
+    if (!window.history.state || !window.history.state.liviaView) {
+      window.history.replaceState({ liviaView: "catalog" }, "");
+    }
+    const handlePopState = (e) => {
+      const state = e.state || { liviaView: "catalog" };
+      const newView = state.liviaView || "catalog";
+      if (newView === "detail" && state.productId && catalog?.products) {
+        const product = catalog.products.find(p => p.id === state.productId);
+        if (product) {
+          setSelected(product);
+          setView("detail");
+          return;
+        }
+      }
+      if (newView !== "detail") setSelected(null);
+      setView(newView);
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, [catalog]);
+
+  const pushView = (newView, extraState = {}) => {
+    window.history.pushState({ liviaView: newView, ...extraState }, "");
+    setView(newView);
+  };
+
+  const goHome = () => { setSelected(null); pushView("catalog"); };
+  const goCart = () => pushView("cart");
+  const goCheckout = () => pushView("checkout");
+  const openProduct = (p) => { setSelected(p); pushView("detail", { productId: p.id }); };
 
   const handleOrderSent = () => {
-    // Clear the cart and go back to catalog after order is sent to WhatsApp
     clear();
-    setView("catalog");
     setSelected(null);
+    pushView("catalog");
   };
 
   if (loading) {
     return (
       <>
-        <Header store={{ name: "Livia", slogan: "Tienda Natural" }} cartCount={0} theme={theme} onToggleTheme={toggle} onGoHome={() => {}} onGoCart={() => {}} />
+        <Header cartCount={0} theme={theme} onToggleTheme={toggle} onGoHome={() => {}} onGoCart={() => {}} />
         <div className="loader">
           <div className="spinner"></div>
           <div>Cargando catálogo...</div>
@@ -44,7 +71,7 @@ export default function App() {
   if (error || !catalog) {
     return (
       <>
-        <Header store={{ name: "Livia", slogan: "Tienda Natural" }} cartCount={0} theme={theme} onToggleTheme={toggle} onGoHome={() => {}} onGoCart={() => {}} />
+        <Header cartCount={0} theme={theme} onToggleTheme={toggle} onGoHome={() => {}} onGoCart={() => {}} />
         <div className="errorState">
           <div className="em">⚠️</div>
           <h3>No se pudo cargar el catálogo</h3>
@@ -60,7 +87,6 @@ export default function App() {
   return (
     <>
       <Header
-        store={store}
         cartCount={count}
         onGoHome={goHome}
         onGoCart={goCart}

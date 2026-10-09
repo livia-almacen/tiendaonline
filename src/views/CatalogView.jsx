@@ -21,11 +21,27 @@ export default function CatalogView({ store, categories, products, onSelectProdu
     });
   }, [products, cat, search]);
 
+  // Fallback: si el logo no carga, muestra la hojita
+  const [logoFailed, setLogoFailed] = useState(false);
+
   return (
     <>
       <section className="hero">
-        <div className="decor">🌿</div>
-        <h2>{store?.heroLine1 || "Alimentación consciente"}<br />{store?.heroLine2 || "en la puerta de tu casa"}</h2>
+        {/* Logo en el hero, tamaño mediano */}
+        {!logoFailed && (
+          <img
+            src="/logo.png"
+            alt={store?.name || "Livia"}
+            className="heroLogo"
+            onError={() => setLogoFailed(true)}
+          />
+        )}
+        <h2>
+          <span className="heroLeaf" aria-hidden="true">🌿</span>
+          {store?.heroLine1 || "Alimentación consciente"}
+          <br />
+          {store?.heroLine2 || "en la puerta de tu casa"}
+        </h2>
         <p>Frutos secos, semillas, cereales, especias y productos naturales seleccionados con cuidado. Hacé tu pedido y coordinamos entrega o retiro.</p>
       </section>
 
