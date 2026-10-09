@@ -1,10 +1,13 @@
 import { useMemo, useState } from 'react';
 import ProductCard from '../components/ProductCard';
 import { Icon } from '../utils/icons';
+import { useInView } from '../hooks/useInView';
 
 export default function CatalogView({ store, categories, products, onSelectProduct }) {
   const [search, setSearch] = useState("");
   const [cat, setCat] = useState("Todos");
+  const [logoFailed, setLogoFailed] = useState(false);
+  const [gridRef, gridInView] = useInView({ threshold: 0.05 });
 
   const allCats = ["Todos", ...(categories || [])];
 
@@ -21,28 +24,27 @@ export default function CatalogView({ store, categories, products, onSelectProdu
     });
   }, [products, cat, search]);
 
-  // Fallback: si el logo no carga, muestra la hojita
-  const [logoFailed, setLogoFailed] = useState(false);
-
   return (
     <>
       <section className="hero">
-        {/* Logo en el hero, tamaño mediano */}
         {!logoFailed && (
           <img
             src="/logo.png"
             alt={store?.name || "Livia"}
-            className="heroLogo"
+            className="heroLogo animDropIn"
             onError={() => setLogoFailed(true)}
           />
         )}
-        <h2>
+        <h2 className="animDropIn delay-1">
           <span className="heroLeaf" aria-hidden="true">🌿</span>
           {store?.heroLine1 || "Alimentación consciente"}
           <br />
           {store?.heroLine2 || "en la puerta de tu casa"}
         </h2>
-        <p>Frutos secos, semillas, cereales, especias y productos naturales seleccionados con cuidado. Hacé tu pedido y coordinamos entrega o retiro.</p>
+        <p className="animDropIn delay-2">
+          Frutos secos, semillas, cereales, especias y productos naturales seleccionados con cuidado.
+          Hacé tu pedido y coordinamos entrega o retiro.
+        </p>
       </section>
 
       <div className="searchBar">
@@ -73,9 +75,19 @@ export default function CatalogView({ store, categories, products, onSelectProdu
             Sin resultados
           </div>
         ) : (
-          <div className="grid fadeIn">
-            {filtered.map(p => (
-              <ProductCard key={p.id} product={p} onClick={onSelectProduct} />
+          <div
+            ref={gridRef}
+            className={`grid ${gridInView ? "animStagger" : ""}`}
+            key={cat + "-" + search}
+          >
+            {filtered.map((p, i) => (
+              <div
+                key={p.id}
+                className="gridCardWrap"
+                style={{ animationDelay: gridInView ? `${Math.min(i * 60, 500)}ms` : "0ms" }}
+              >
+                <ProductCard product={p} onClick={onSelectProduct} />
+              </div>
             ))}
           </div>
         )}

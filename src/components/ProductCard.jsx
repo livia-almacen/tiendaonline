@@ -15,7 +15,7 @@ export default function ProductCard({ product, onClick }) {
       <div className="cardImg">
         {product.image
           ? <img src={`/productos/${product.image}`} alt={product.name} onError={e => { e.target.style.display = "none"; }} />
-          : <span>{getPlaceholder(product.category)}</span>
+          : <span className="cardImgEmoji">{getPlaceholder(product.category)}</span>
         }
         {stockBadge}
       </div>
