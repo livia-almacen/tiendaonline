@@ -17,6 +17,12 @@ export default function App() {
   const [view, setView] = useState("catalog");
   const [selected, setSelected] = useState(null);
 
+  // SCROLL AL TOP cada vez que cambia la vista o el producto seleccionado.
+  // Instant (no smooth) para que se sienta inmediato al abrir/cerrar vistas.
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [view, selected?.id]);
+
   // Browser back button support
   useEffect(() => {
     if (!window.history.state || !window.history.state.liviaView) {
@@ -106,6 +112,7 @@ export default function App() {
       {view === "detail" && selected && (
         <ProductDetailView
           product={selected}
+          cart={cart}
           onBack={goHome}
           onAddToCart={addItem}
         />
@@ -114,6 +121,7 @@ export default function App() {
       {view === "cart" && (
         <CartView
           cart={cart}
+          products={products}
           subtotal={subtotal}
           onBack={goHome}
           onCheckout={goCheckout}

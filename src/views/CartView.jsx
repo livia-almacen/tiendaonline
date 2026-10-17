@@ -1,8 +1,9 @@
 import { fmt } from '../utils/format';
 import { Icon } from '../utils/icons';
 import { getPlaceholder } from '../utils/placeholder';
+import { getMaxQtyForCartItem } from '../utils/stock';
 
-export default function CartView({ cart, subtotal, onBack, onCheckout, onRemove, onUpdateQty }) {
+export default function CartView({ cart, products, subtotal, onBack, onCheckout, onRemove, onUpdateQty }) {
   if (cart.length === 0) {
     return (
       <main className="fadeIn">
@@ -20,6 +21,9 @@ export default function CartView({ cart, subtotal, onBack, onCheckout, onRemove,
     );
   }
 
+  // Para cada item, buscar el producto en el catálogo para saber el stock
+  const findProduct = (id) => (products || []).find(p => p.id === id);
+
   return (
     <main className="fadeIn">
       <button className="backLink" onClick={onBack}><Icon name="back" size={14} /> Seguir comprando</button>
@@ -27,29 +31,44 @@ export default function CartView({ cart, subtotal, onBack, onCheckout, onRemove,
         <div className="cartTitle">Tu carrito</div>
         <div className="cartSub">{cart.length} producto{cart.length > 1 ? "s" : ""} en tu pedido</div>
 
-        {cart.map((it, i) => (
-          <div key={i} className="cartItem">
-            <div className="cartItemImg">
-              {it.image
-                ? <img src={`/productos/${it.image}`} alt={it.name} onError={e => { e.target.style.display = "none"; }} />
-                : <span>{getPlaceholder(it.category)}</span>
-              }
-            </div>
-            <div className="cartItemInfo">
-              <div className="cartItemName">{it.name}</div>
-              <div className="cartItemPres">Presentación: {it.pres.label} · Cantidad: {it.qty}</div>
-              <div className="cartItemPrice">{fmt(it.pres.price * it.qty)}</div>
-            </div>
-            <div className="cartItemActions">
-              <button className="removeBtn" onClick={() => onRemove(i)} title="Quitar">×</button>
-              <div className="qtyCtl">
-                <button className="qtyBtn" onClick={() => onUpdateQty(i, -1)}>−</button>
-                <span className="qtyVal">{it.qty}</span>
-                <button className="qtyBtn" onClick={() => onUpdateQty(i, 1)}>+</button>
+        {cart.map((it, i) => {
+          const product = findProduct(it.productId);
+          const maxQty = product ? getMaxQtyForCartItem(product, it.pres, it.qty, cart) : Infinity;
+          const atMax = maxQty !== Infinity && it.qty >= maxQty;
+          return (
+            <div key={i} className="cartItem">
+              <div className="cartItemImg">
+                {it.image
+                  ? <img src={`/productos/${it.image}`} alt={it.name} onError={e => { e.target.style.display = "none"; }} />
+                  : <span>{getPlaceholder(it.category)}</span>
+                }
+              </div>
+              <div className="cartItemInfo">
+                <div className="cartItemName">{it.name}</div>
+                <div className="cartItemPres">Presentación: {it.pres.label} · Cantidad: {it.qty}</div>
+                <div className="cartItemPrice">{fmt(it.pres.price * it.qty)}</div>
+                {atMax && (
+                  <div style={{ fontSize: 11, color: "var(--ac)", marginTop: 4, fontWeight: 700 }}>
+                    Máximo stock alcanzado
+                  </div>
+                )}
+              </div>
+              <div className="cartItemActions">
+                <button className="removeBtn" onClick={() => onRemove(i)} title="Quitar">×</button>
+                <div className="qtyCtl">
+                  <button className="qtyBtn" onClick={() => onUpdateQty(i, -1)}>−</button>
+                  <span className="qtyVal">{it.qty}</span>
+                  <button
+                    className="qtyBtn"
+                    onClick={() => onUpdateQty(i, 1)}
+                    disabled={atMax}
+                    title={atMax ? "Alcanzaste el stock disponible" : ""}
+                  >+</button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
 
         <div className="cartSummary">
           <div className="summaryRow"><span>Subtotal ({cart.reduce((s, i) => s + i.qty, 0)} items)</span><span>{fmt(subtotal)}</span></div>
