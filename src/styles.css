@@ -446,12 +446,14 @@ main { max-width: 1200px; margin: 0 auto; padding: 20px; }
   letter-spacing: .5px;
   position: relative; overflow: hidden;
   transition: transform var(--anim-fast) var(--ease), box-shadow var(--anim-base) var(--ease);
+  isolation: isolate;
 }
 .btnPrimary::before {
   content: ""; position: absolute; inset: 0;
   background: linear-gradient(135deg, var(--gL), var(--g));
   opacity: 0;
   transition: opacity var(--anim-base) var(--ease);
+  z-index: -1;
 }
 .btnPrimary > * { position: relative; z-index: 1; }
 .btnPrimary:hover { transform: translateY(-2px); box-shadow: var(--shL); }
@@ -758,6 +760,7 @@ footer .fInfo a:hover { opacity: .75; }
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
     scroll-behavior: auto !important;
+    .toast { animation: none; }
   }
 }
 
@@ -785,4 +788,35 @@ footer .fInfo a:hover { opacity: .75; }
   .cartTitle { font-size: 24px; }
   .deliveryOpts { grid-template-columns: 1fr; }
   footer .fLogoImg { max-width: 180px; width: 65%; }
+}
+
+/* TOAST — notificación emergente para feedback de acciones */
+.toast {
+  position: fixed;
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  background: var(--gD, #3d6628);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.3;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: calc(100vw - 32px);
+  text-align: center;
+  pointer-events: none;
+  animation: toastSlideUp 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+             toastFadeOut 0.3s 2.2s forwards;
+}
+
+@keyframes toastSlideUp {
+  from { opacity: 0; transform: translate(-50%, 40px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@keyframes toastFadeOut {
+  to { opacity: 0; transform: translate(-50%, 10px); }
 }

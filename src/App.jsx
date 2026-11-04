@@ -17,8 +17,21 @@ export default function App() {
   const [view, setView] = useState("catalog");
   const [selected, setSelected] = useState(null);
 
+  // TOAST: notificación emergente para feedback de acciones (sobre todo en mobile)
+  const [toast, setToast] = useState(null);
+  const showToast = (msg) => {
+    // Usar un id único así cada toast nuevo reinicia la animación
+    setToast({ msg, id: Date.now() });
+    setTimeout(() => setToast(t => (t && t.msg === msg ? null : t)), 2500);
+  };
+
+  // Wrapper: agrega al carrito y muestra el toast
+  const handleAddToCart = (product, pres, qty) => {
+    addItem(product, pres, qty);
+    showToast(`✓ ${product.name} agregado al carrito`);
+  };
+
   // SCROLL AL TOP cada vez que cambia la vista o el producto seleccionado.
-  // Instant (no smooth) para que se sienta inmediato al abrir/cerrar vistas.
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [view, selected?.id]);
@@ -114,7 +127,7 @@ export default function App() {
           product={selected}
           cart={cart}
           onBack={goHome}
-          onAddToCart={addItem}
+          onAddToCart={handleAddToCart}
         />
       )}
 
@@ -141,6 +154,13 @@ export default function App() {
       )}
 
       <Footer store={store} />
+
+      {/* TOAST */}
+      {toast && (
+        <div key={toast.id} className="toast" role="status" aria-live="polite">
+          {toast.msg}
+        </div>
+      )}
     </>
   );
 }
