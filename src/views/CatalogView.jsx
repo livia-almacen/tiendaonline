@@ -4,16 +4,26 @@ import { Icon } from '../utils/icons';
 import { useInView } from '../hooks/useInView';
 
 export default function CatalogView({ store, categories, products, onSelectProduct }) {
-  const [search, setSearch] = useState("");
+   const [search, setSearch] = useState("");
   const [cat, setCat] = useState("Todos");
+  const [sortBy, setSortBy] = useState("name-asc");
+  const [hideOutOfStock, setHideOutOfStock] = useState(false);
   const [logoFailed, setLogoFailed] = useState(false);
   const [gridRef, gridInView] = useInView({ threshold: 0.05 });
 
   const allCats = ["Todos", ...(categories || [])];
 
+  // Precio mínimo de un producto (la presentación más barata)
+  const getMinPrice = (p) => p.presentations?.length
+    ? Math.min(...p.presentations.map(pr => pr.price))
+    : p.price;
+
+  const isOutOfStock = (p) => p.stockStatus === "agotado" || (p.stock !== undefined && p.stock <= 0);
+
   const filtered = useMemo(() => {
-    return products.filter(p => {
+    let list = products.filter(p => {
       if (cat !== "Todos" && p.category !== cat) return false;
+      if (hideOutOfStock && isOutOfStock(p)) return false;
       if (search) {
         const q = search.toLowerCase();
         return p.name.toLowerCase().includes(q)
@@ -22,7 +32,25 @@ export default function CatalogView({ store, categories, products, onSelectProdu
       }
       return true;
     });
-  }, [products, cat, search]);
+
+    return [...list].sort((a, b) => {
+      switch (sortBy) {
+        case "name-asc":   return a.name.localeCompare(b.name);
+        case "name-desc":  return b.name.localeCompare(a.name);
+        case "price-asc":  return getMinPrice(a) - getMinPrice(b);
+        case "price-desc": return getMinPrice(b) - getMinPrice(a);
+        case "availability": {
+          const oa = isOutOfStock(a) ? 1 : 0;
+          const ob = isOutOfStock(b) ? 1 : 0;
+          if (oa !== ob) return oa - ob;
+          return a.name.localeCompare(b.name);
+        }
+        default: return 0;
+      }
+    });
+  }, [products, cat, search, sortBy, hideOutOfStock]);
+
+  const outOfStockCount = products.filter(isOutOfStock).length;
 
   return (
     <>
@@ -69,7 +97,35 @@ export default function CatalogView({ store, categories, products, onSelectProdu
         </div>
       </div>
 
-      <main>
+            <main>
+        <div className="controlsBar">
+          <span className="resultCount">
+            {filtered.length} {filtered.length === 1 ? 'producto' : 'productos'}
+          </span>
+          <div className="controlsRight">
+            <label className="toggleFilter">
+              <input
+                type="checkbox"
+                checked={hideOutOfStock}
+                onChange={e => setHideOutOfStock(e.target.checked)}
+              />
+              <span>Solo disponibles{outOfStockCount > 0 ? ` (${outOfStockCount} agotados)` : ""}</span>
+            </label>
+            <select
+              className="sortSelect"
+              value={sortBy}
+              onChange={e => setSortBy(e.target.value)}
+              aria-label="Ordenar productos"
+            >
+              <option value="name-asc">Nombre (A → Z)</option>
+              <option value="name-desc">Nombre (Z → A)</option>
+              <option value="price-asc">Precio: menor a mayor</option>
+              <option value="price-desc">Precio: mayor a menor</option>
+              <option value="availability">Disponibles primero</option>
+            </select>
+          </div>
+        </div>
+
         {filtered.length === 0 ? (
           <div style={{ textAlign: "center", padding: "40px 20px", color: "var(--txL)" }}>
             Sin resultados
@@ -78,7 +134,7 @@ export default function CatalogView({ store, categories, products, onSelectProdu
           <div
             ref={gridRef}
             className={`grid ${gridInView ? "animStagger" : ""}`}
-            key={cat + "-" + search}
+            key={cat + "-" + search + "-" + sortBy + "-" + hideOutOfStock}
           >
             {filtered.map((p, i) => (
               <div
